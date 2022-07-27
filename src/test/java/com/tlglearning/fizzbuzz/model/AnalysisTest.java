@@ -2,11 +2,9 @@ package com.tlglearning.fizzbuzz.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.tlglearning.fizzbuzz.FizzBuzz;
 import java.util.EnumSet;
 import java.util.Set;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -55,13 +53,21 @@ class AnalysisTest {
 
   @ParameterizedTest
   @ValueSource(ints = {-1, -3, -5, -1})
-  void analyze_exception(int value) {
-    try {
+  void analyze_negative(int value) {
+    assertThrows(IllegalArgumentException.class, new InvalidInvocation(value));
+  }
+  //nested class
+  private class InvalidInvocation implements Executable {
+
+    private final int value;
+
+    public InvalidInvocation(int value) {
+      this.value = value;
+    }
+
+    @Override
+    public void execute() throws Throwable {
       analysis.analyze(value);
-      fail();
-    } catch (IllegalArgumentException e) {
-      // Do nothing; this is the expected behavior.
     }
   }
-
 }
