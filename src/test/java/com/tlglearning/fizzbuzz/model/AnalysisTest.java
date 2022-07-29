@@ -17,8 +17,7 @@ class AnalysisTest {
   final Analysis analysis = new Analysis();
 //  private Analysis analysis;
 
-
-  //everytime instance will be created anyways, so don'e need to do below
+  //everytime instance will be created anyways, so don't need to do below
 //  @BeforeEach
 //  void setUp() {
 //    analysis = new Analysis();
@@ -54,22 +53,20 @@ class AnalysisTest {
   @ParameterizedTest
   @ValueSource(ints = {-1, -3, -5, -1})
   void analyze_negative(int value) {
+    class InvalidInvocation implements Executable {
+
+      private final int value;
+
+      public InvalidInvocation(int value) {
+        this.value = value;
+      }
+      @Override
+      public void execute() throws Throwable {
+        analysis.analyze(value);
+      }
+
+    }
     assertThrows(IllegalArgumentException.class, new InvalidInvocation(value));
   }
 
-  //nested class
-  class InvalidInvocation implements Executable {
-
-
-    private final int value;
-
-    public InvalidInvocation(int value) {
-      this.value = value;
-    }
-
-    @Override
-    public void execute() throws Throwable {
-      analysis.analyze(value);
-    }
-  }
 }
